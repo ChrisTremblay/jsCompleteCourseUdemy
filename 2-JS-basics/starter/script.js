@@ -78,7 +78,7 @@ yearsToRetirement(1992, "Chris");*/
    Lecture 22 */
 /////////////////////////////
 
-const bills = [124, 48, 268];
+/*const bills = [124, 48, 268];
 const tips = [0.2, 0.15, 0.1];
 
 function calculateTip(bills){
@@ -92,4 +92,28 @@ function calculateTip(bills){
 }
 
 var totalToPay = calculateTip(bills);
-console.log(totalToPay);
+console.log(totalToPay);*/
+
+//OBJECTS//
+
+var john = {
+	firstName: 'John',
+	lastName: 'Doe',
+	mass: 70,
+	height: 1.80,
+	calcBMI: function(){
+		return this.mass/(this.height*this.height);
+	}
+};
+
+var mark = {
+	firstName: 'Mark',
+	lastName: 'Randal',
+	mass: 100,
+	height: 1.73,
+	calcBMI: function(){
+		return this.mass/(this.height*this.height);
+	}
+};
+
+console.log(`${john.calcBMI()} is john BMI and ${mark.calcBMI()} is mark BMI`);
