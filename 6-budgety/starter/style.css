@@ -8,11 +8,10 @@
     box-sizing: border-box;
 }
 
-.clearfix::after {
+/*.clearfix::after {
     content: "";
-    display: table;
     clear: both;
-}
+}*/
 
 body {
     color: #555;
@@ -23,7 +22,11 @@ body {
     font-weight: 400;
 }
 
-.right { float: right; }
+.right { 
+    display:flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
 .red { color: #FF5049 !important; }
 .red-focus:focus { border: 1px solid #FF5049 !important; }
 
@@ -46,6 +49,8 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     color: #fff;
+    display: flex;
+    flex-direction: column;
 }
 
 .budget__title {
@@ -70,11 +75,15 @@ body {
 }
 
 .budget__income {
+    display:flex;
+    justify-content: space-between;
     margin-bottom: 10px;
     background-color: #28B9B5;
 }
 
 .budget__expenses {
+    display:flex;
+    justify-content: space-between;
     background-color: #FF5049;
 }
 
@@ -122,6 +131,10 @@ body {
 .add__container {
     margin: 0 auto;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    flex-direction: row;
 }
 
 .add__type {
@@ -177,18 +190,22 @@ body {
 
 /***** LISTS *****/
 .container {
-    width: 1000px;
-    margin: 60px auto;
+    /*width: 1000px;*/
+    margin-top: 30px;
+    margin-bottom: 60px;
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 .income {
-    float: left;
+    margin-top:10px;
     width: 475px;
-    margin-right: 50px;
 }
 
 .expenses {
-    float: left;
+    margin-top:10px;
     width: 475px;
 }
 
@@ -205,23 +222,26 @@ h2 {
 .item {
     padding: 13px;
     border-bottom: 1px solid #e7e7e7;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: nowrap;
 }
 
 .item:first-child { border-top: 1px solid #e7e7e7; }
 .item:nth-child(even) { background-color: #f7f7f7; }
 
 .item__description {
-    float: left;
+
 }
 
 .item__value {
-    float: left;
+    
     transition: transform 0.3s;
 }
 
 .item__percentage {
-    float: left;
-    margin-left: 20px;
+    margin-left:10px;
     transition: transform 0.3s;
     font-size: 11px;
     background-color: #FFDAD9;
