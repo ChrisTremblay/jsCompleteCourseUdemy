@@ -1,10 +1,11 @@
 //BUDGET CONTROLLER
 var budgetController = (function() {
-	var Expense = function(id, description, value){
+	var Expense = function(id, description, value, category){
 		this.id = id;
 		this.description = description;
 		this.value = value;
 		this.percentage = -1;
+		this.category = category;
 	};
 
 	Expense.prototype.calcPercentage = function(totalIncome){
@@ -47,7 +48,7 @@ var budgetController = (function() {
 	};
 
 	return {
-		addItem: function(type, desc, val){
+		addItem: function(type, desc, val, category){
 			var newItem, ID;
 			
 			if(data.allItems[type].length > 0){
@@ -57,7 +58,7 @@ var budgetController = (function() {
 			}
 
 			if(type === "expense"){
-				newItem = new Expense(ID, desc, val);
+				newItem = new Expense(ID, desc, val, category);
 			} else if(type === "income"){
 				newItem = new Income(ID, desc, val);
 			}else{
@@ -78,6 +79,10 @@ var budgetController = (function() {
 			if(index !== -1){
 				data.allItems[type].splice(index, 1);
 			}
+		},
+
+		deleteAllList: function(type){
+			data.allItems[type]=[];
 		},
 
 		calculateBudget: function(){
@@ -134,7 +139,9 @@ var UIController = (function(){
 		percentageLabel: '.budget__expenses--percentage',
 		container: '.container',
 		expensePercentageLabel: '.item__percentage',
-		dateLabel: '.budget__title--month'
+		dateLabel: '.budget__title--month',
+		deleteAllList: '.delete_list',
+		inputCategory: '.add__category'
 	};
 
 
@@ -161,7 +168,8 @@ var UIController = (function(){
 			return {
 				type: document.querySelector(DOMstrings.inputType).value, //income or expense
 				description: document.querySelector(DOMstrings.inputDescription).value,
-				value: parseFloat(document.querySelector(DOMstrings.inputValue).value)
+				value: parseFloat(document.querySelector(DOMstrings.inputValue).value),
+				category: document.querySelector(DOMstrings.inputCategory).value
 			};
 		},
 
@@ -187,10 +195,21 @@ var UIController = (function(){
      		document.getElementById(id).parentNode.removeChild(document.getElementById(id));
      	},
 
+     	deleteAllListUI: function(type){
+     		var parent, child;
+     		if(type == "expense"){
+     			parent = document.getElementById("expense_list_container");
+     			parent.innerHTML = "";
+     		}else if(type == "income"){
+     			parent = document.getElementById("income_list_container");
+     			parent.innerHTML = "";
+     		}
+     	},
+
      	clearFields: function(){
      		var fields, fieldsArr;
 
-     		fields = document.querySelectorAll(DOMstrings.inputDescription + ', '+ DOMstrings.inputValue);
+     		fields = document.querySelectorAll(DOMstrings.inputDescription + ', '+ DOMstrings.inputValue+ ', '+ DOMstrings.inputCategory);
      		fieldsArr = Array.prototype.slice.call(fields);
 
      		fieldsArr.forEach(function(current, index, array){
@@ -238,13 +257,15 @@ var UIController = (function(){
      		var fields = document.querySelectorAll(
      				DOMstrings.inputType + ','+
      				DOMstrings.inputDescription + ','+
-     				DOMstrings.inputValue
+     				DOMstrings.inputValue +','+
+     				DOMstrings.inputCategory
      			);
      		nodeListForEach(fields, function(cur){
      			cur.classList.toggle('red-focus');
      		});
 
      		document.querySelector(DOMstrings.inputBtn).classList.toggle('red');
+     		document.querySelector(DOMstrings.inputCategory).classList.toggle("display__category");
      	},
 
 		getDOMstrings: function(){
@@ -257,10 +278,9 @@ var UIController = (function(){
 //GLOBAL APP CONTROLLER
 var controller = (function(budgetCtrl, UICtrl){
 	var setupEventListeners = function(){
-		var DOM = UICtrl.getDOMstrings();
+		var DOM = UICtrl.getDOMstrings(), deleteList;
 
 		document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
-
 		document.addEventListener('keypress', function(e){
 			if(e.keyCode === 13 || e.which === 13){
 				ctrlAddItem();
@@ -269,7 +289,20 @@ var controller = (function(budgetCtrl, UICtrl){
 
 		document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
 		document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);
+		
+		var deleteList = document.querySelectorAll(DOM.deleteAllList);
+
+		for(var i=0; i<deleteList.length; i++){
+			result = deleteList[i];
+			result.addEventListener('click', ctrlDeleteAllItems);
+		}
 	};
+
+	var nodeListForEach = function(list, callback){
+     	for(var i=0; i<list.length; i++){
+     		callback(list[i], i);
+     	}
+    };
 
 	var updateBudget = function(){
 		budgetCtrl.calculateBudget();
@@ -288,7 +321,7 @@ var controller = (function(budgetCtrl, UICtrl){
 		input = UICtrl.getInput();
 
 		if(input.description != "" && !isNaN(input.value) && input.value > 0){
-			newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+			newItem = budgetCtrl.addItem(input.type, input.description, input.value, input.category);
 			UICtrl.addListItem(newItem, input.type);
 			UICtrl.clearFields();
 			updateBudget();
@@ -310,6 +343,15 @@ var controller = (function(budgetCtrl, UICtrl){
 			updatePercentages();
 		}
 	};
+
+	var ctrlDeleteAllItems = function(e){
+		var type;
+		type = e.target.parentNode.parentNode.parentNode.className;
+		UICtrl.deleteAllListUI(type);
+		budgetCtrl.deleteAllList(type);
+		updateBudget();
+		updatePercentages();
+	}
 
 	return {
 		init: function(){
