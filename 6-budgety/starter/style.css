@@ -284,9 +284,9 @@ h2 {
     color: #28B9B5;
 }
 
-.expenses .item__value,
-.expenses .item__percentage,
-.expenses .item__delete--btn {
+.expense .item__value,
+.expense .item__percentage,
+.expense .item__delete--btn {
     color: #FF5049;
 }
 
@@ -319,7 +319,8 @@ h2 {
     text-decoration: none;
 }
 
-
+.btn-red-mini:active { transform: translateY(2px); }
+.btn-red-mini:focus { outline: none; }
 .item__delete--btn:focus { outline: none; }
 .item__delete--btn:active { transform: translateY(2px); }
 
