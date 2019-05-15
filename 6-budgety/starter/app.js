@@ -141,7 +141,14 @@ var UIController = (function(){
 		expensePercentageLabel: '.item__percentage',
 		dateLabel: '.budget__title--month',
 		deleteAllList: '.delete_list',
-		inputCategory: '.add__category'
+		inputCategory: '.add__category',
+		housingContainer: '.housing_list_container',
+		utilitiesContainer: '.utilities_list_container',
+		healthcareContainer: '.healthcare_list_container',
+		foodContainer: '.food_list_container',
+		entertainmentContainer: '.entertainment_list_container',
+		transportationContainer: '.transportation_list_container',
+		expenseListLabel: '.expense__list__category'
 	};
 
 
@@ -180,14 +187,32 @@ var UIController = (function(){
 				element = DOMstrings.incomeContainer;
         		html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
         	}else if(type ="expense"){
-        		element = DOMstrings.expenseContainer;
+        		switch(obj.category){
+     				case "housing":
+     					element = DOMstrings.housingContainer;
+     					break;
+     				case "utilities":
+     					element = DOMstrings.utilitiesContainer;
+     					break;
+     				case "healthcare":
+     					element = DOMstrings.healthcareContainer;
+     					break;
+     				case "food":
+     					element = DOMstrings.foodContainer;
+     					break;
+     				case "entertainment":
+     					element = DOMstrings.entertainmentContainer;
+     					break;
+     				case "transportation":
+     					element = DOMstrings.transportationContainer;
+     					break;
+     			}
         		html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
         	}
 
         	newHtml = html.replace('%id%', obj.id);
         	newHtml = newHtml.replace('%description%', obj.description);
         	newHtml = newHtml.replace('%value%', formatNumber(obj.value, type));
-
         	document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
      	},
 
@@ -198,8 +223,11 @@ var UIController = (function(){
      	deleteAllListUI: function(type){
      		var parent, child;
      		if(type == "expense"){
-     			parent = document.getElementById("expense_list_container");
-     			parent.innerHTML = "";
+     			parent = document.querySelectorAll(DOMstrings.expenseListLabel);
+     			nodeListForEach(parent, function(cur){
+     				cur.innerHTML="";
+     			});
+     			//parent.innerHTML = "";
      		}else if(type == "income"){
      			parent = document.getElementById("income_list_container");
      			parent.innerHTML = "";
@@ -268,6 +296,17 @@ var UIController = (function(){
      		document.querySelector(DOMstrings.inputCategory).classList.toggle("display__category");
      	},
 
+     	displayExpenseList: function(){
+     		parent = document.querySelectorAll(DOMstrings.expenseListLabel);
+     		nodeListForEach(parent, function(cur){	
+     			if(cur.children.length >0){
+     				document.getElementById(cur.parentNode.id).classList.add('expense_list_category_showing');
+     			}else{
+     				document.getElementById(cur.parentNode.id).classList.remove('expense_list_category_showing');
+     			}
+     		});
+     	},
+
 		getDOMstrings: function(){
 			return DOMstrings;
 		}
@@ -326,6 +365,7 @@ var controller = (function(budgetCtrl, UICtrl){
 			UICtrl.clearFields();
 			updateBudget();
 			updatePercentages();
+			UICtrl.displayExpenseList();
 		}
 	};
 
@@ -341,6 +381,7 @@ var controller = (function(budgetCtrl, UICtrl){
 			UICtrl.deleteListItem(itemID);
 			updateBudget();
 			updatePercentages();
+			UICtrl.displayExpenseList();
 		}
 	};
 
@@ -351,6 +392,7 @@ var controller = (function(budgetCtrl, UICtrl){
 		budgetCtrl.deleteAllList(type);
 		updateBudget();
 		updatePercentages();
+		UICtrl.displayExpenseList();
 	}
 
 	return {

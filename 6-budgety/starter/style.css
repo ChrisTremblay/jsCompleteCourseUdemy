@@ -229,13 +229,13 @@ body {
 }
 
 .income {
-    margin-top:10px;
-    width: 475px;
+    margin:20px;
+    width: 600px;
 }
 
 .expense {
-    margin-top:10px;
-    width: 475px;
+    margin:20px;
+    width: 600px;
 }
 
 h2 {
@@ -247,6 +247,23 @@ h2 {
 
 .icome__title { color: #28B9B5; }
 .expenses__title { color: #FF5049; }
+.category__title { 
+    color: #a7adb7;
+}
+
+#housing__block,
+#utilities__block,
+#healthcare__block,
+#food__block,
+#entertainment__block,
+#transportation__block{
+    display: none;
+    margin-bottom:20px;
+}
+
+.expense_list_category_showing{
+    display:block !important;
+}
 
 .item {
     padding: 13px;
