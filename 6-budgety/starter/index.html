@@ -6,6 +6,7 @@
         <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
         <link type="text/css" rel="stylesheet" href="style.css">
         <title>Budgety</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
     </head>
     <body>
         
@@ -69,9 +70,8 @@
                     <div id = "income_list_container" class="income__list">
                     </div>
                 </div>
-                
-                
-                
+
+                    
                 <div class="expense">
                     <div class="header__list">
                         <h2 class="expenses__title">Expenses</h2>
@@ -106,10 +106,12 @@
                     </div>
                 </div>
             </div>
-            
-            
         </div>
-        
+        <div class="center-chart">
+             <div class="chart-container">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>    
         <script src="app.js"></script>
     </body>
 </html>

@@ -206,14 +206,20 @@ var UIController = (function(){
      				case "transportation":
      					element = DOMstrings.transportationContainer;
      					break;
+     				default:
+     					console.log("Not valid");
+     					break;
      			}
-        		html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+     			if(element){
+        			html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+        		}
         	}
-
-        	newHtml = html.replace('%id%', obj.id);
-        	newHtml = newHtml.replace('%description%', obj.description);
-        	newHtml = newHtml.replace('%value%', formatNumber(obj.value, type));
-        	document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
+			if(element){
+	        	newHtml = html.replace('%id%', obj.id);
+	        	newHtml = newHtml.replace('%description%', obj.description);
+	        	newHtml = newHtml.replace('%value%', formatNumber(obj.value, type));
+        		document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
+        	}
      	},
 
      	deleteListItem: function(id){
@@ -307,6 +313,32 @@ var UIController = (function(){
      		});
      	},
 
+     	displayChart: function(obj){
+     		if(obj.totalExpense !=0 || obj.totalIncome !=0){
+				var ctx = document.getElementById('myChart');
+				var myChart = new Chart(ctx, {
+				    type: 'pie',
+				    data: {
+				        labels: ['Expense', 'Income'],
+				        datasets: [{
+				            data: [obj.totalExpense, obj.totalIncome],
+				            backgroundColor: [
+				                'rgba(255, 99, 132, 0.2)',
+				                'rgba(54, 162, 235, 0.2)',
+				            ],
+				            borderColor: [
+				                'rgba(255, 99, 132, 1)',
+				                'rgba(54, 162, 235, 1)',
+				            ],
+				            borderWidth: 1
+				        }]
+				    },
+				    options: {
+				    }
+				});
+			}
+     	},
+
 		getDOMstrings: function(){
 			return DOMstrings;
 		}
@@ -346,7 +378,8 @@ var controller = (function(budgetCtrl, UICtrl){
 	var updateBudget = function(){
 		budgetCtrl.calculateBudget();
 		var budget = budgetCtrl.getBudget();
-		UICtrl.displayBudget(budget); 
+		UICtrl.displayBudget(budget);
+		UICtrl.displayChart(budget);
 	};
 
 	var updatePercentages = function(){
@@ -404,8 +437,15 @@ var controller = (function(budgetCtrl, UICtrl){
 				totalIncome: 0,
 				totalExpense: 0,
 				percentage: 0
-			}); 
+			});
+			UICtrl.displayChart({
+				budget: 0,
+				totalIncome: 0,
+				totalExpense: 0,
+				percentage: 0
+			});
 			setupEventListeners();
+			UICtrl.displayChart();
 		}
 	};
 })(budgetController, UIController);
