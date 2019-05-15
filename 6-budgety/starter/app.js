@@ -316,19 +316,20 @@ var UIController = (function(){
      	displayChart: function(obj){
      		if(obj.totalExpense !=0 || obj.totalIncome !=0){
 				var ctx = document.getElementById('myChart');
+
 				var myChart = new Chart(ctx, {
 				    type: 'pie',
 				    data: {
-				        labels: ['Expense', 'Income'],
+				        labels: ['Available','Expenses',],
 				        datasets: [{
-				            data: [obj.totalExpense, obj.totalIncome],
+				            data: [obj.totalIncome - obj.totalExpense, obj.totalExpense],
 				            backgroundColor: [
-				                'rgba(255, 99, 132, 0.2)',
-				                'rgba(54, 162, 235, 0.2)',
+				            	'rgba(40, 185, 181, 0.2)',
+				            	'rgba(255, 80, 73, 0.2)'				            	
 				            ],
 				            borderColor: [
-				                'rgba(255, 99, 132, 1)',
-				                'rgba(54, 162, 235, 1)',
+				            	'rgba(40, 185, 181, 1)',
+				            	'rgba(255, 80, 73, 1)'				            				                
 				            ],
 				            borderWidth: 1
 				        }]
