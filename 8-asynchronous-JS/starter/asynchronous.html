@@ -9,7 +9,46 @@
 <body>
     <h1>Asynchronous JavaScript</h1>
     <script>
-        
+    	const getIds = new Promise((resolve, reject)=>{
+    		setTimeout(()=>{
+    			resolve("[12, 324, 56, 54]");
+    		}, 1500);
+    	});
+
+    	const getRecipe = recID =>{
+    		return new Promise((resolve, reject)=>{
+	    		setTimeout((ID)=>{
+		    		const recipe = {title: "Fresh tomatoe pasta", publisher: "Chris"};
+		    		resolve(`${ID}: ${recipe.title}`);
+    			}, 1500, recID);
+    		});
+    	};
+
+    	const getRelatedRecipe = publisher =>{
+    		return new Promise((resolve, reject) =>{
+    			setTimeout(pub =>{
+    				const recipe = {title: "Pizza", publisher: "Chris"};
+    				resolve(`${recipe.title} from ${pub}`)
+    			}, 1500, publisher);
+    		});
+    	};
+
+    	getIds
+    	.then((IDs) =>{
+    		console.log(IDs);
+    		return getRecipe(IDs[2]);
+    	})
+    	.then(recipe => {
+    		console.log(recipe);
+    		return getRelatedRecipe("WOW");
+    	})
+    	.then(related => {
+    		console.log(related);
+    	})
+    	.catch(error =>{
+    		console.log(error);
+    	});
+
     </script>
 </body>
 </html>
