@@ -9,7 +9,7 @@
 <body>
     <h1>Asynchronous JavaScript</h1>
     <script>
-    	const getIds = new Promise((resolve, reject)=>{
+    	/*const getIds = new Promise((resolve, reject)=>{
     		setTimeout(()=>{
     			resolve("[12, 324, 56, 54]");
     		}, 1500);
@@ -31,9 +31,9 @@
     				resolve(`${recipe.title} from ${pub}`)
     			}, 1500, publisher);
     		});
-    	};
+    	};*/
 
-    	getIds
+    	/*getIds
     	.then((IDs) =>{
     		console.log(IDs);
     		return getRecipe(IDs[2]);
@@ -47,7 +47,49 @@
     	})
     	.catch(error =>{
     		console.log(error);
-    	});
+    	});*/
+
+    	/*async function getRecipeAW(){
+    		const IDs = await getIds;
+    		const recipe = await getRecipe(IDs[2]);
+    		const related = await getRelatedRecipe("Chris");
+    		return recipe;
+    	}
+
+    	getRecipeAW().then(res=>{
+    		console.log(`${res}`);
+    	});*/
+
+    	/*function getWeather(woeid){
+	    	
+	    	.then(result => {
+	    		return result.json();
+	    	})
+	    	.then(data =>{
+	    		const today = data.consolidated_weather[0];
+	    		
+	    	})
+	    	.catch(error => {
+	    		console.log(error);
+	    	});	
+    	}*/
+
+    	
+
+
+    	async function getWeatherAW(woeid){
+    		try{
+	    		const result = await fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}/`);
+	    		const data = await result.json();
+	    		const today = data.consolidated_weather[0];
+	    		console.log(`Temperatures in ${data.title} stay between ${today.min_temp}°C and ${today.max_temp}°C`);
+	    		return data;
+	    	} catch(error){
+	    		console.log(error);
+	    	}
+    	}
+    	let dataLondon;
+		getWeatherAW(44418).then(data => dataLondon = data);
 
     </script>
 </body>
